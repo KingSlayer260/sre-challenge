@@ -3,7 +3,6 @@ name: Deploy
 on:
   push:
     branches: [dev, main]
-    paths: ['app/**']
 
 # don't run multiple deploys at the same time
 concurrency:
