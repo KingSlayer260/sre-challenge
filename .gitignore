@@ -1,8 +1,6 @@
 # user specific setup vars
 setup.vars
 
-# for when you recreate the same host ignore hostkey checking
-ansible.cfg
 
 # terraform generated stuff
 terraform/.terraform/
