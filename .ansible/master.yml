@@ -11,7 +11,7 @@
 - name: Provision VM
   hosts: localhost
   connection: local
-  become: yes
+  become: no
   tags:
     - dev_deploy
     - prod_deploy
