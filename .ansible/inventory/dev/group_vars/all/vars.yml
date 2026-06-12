@@ -1,0 +1,13 @@
+db_host: db
+db_name: sre
+db_user: sre
+proxmox_endpoint: "https://192.168.178.222:8006"
+proxmox_node: "moxy"
+proxmox_ssh_key_path: "/home/kube/.ssh/proxmox"
+terraform_workspace: "dev"
+target_group: "dev_vm"
+vm_name: "sre-dev"
+vm_ip: "192.168.178.234/24"
+vm_gateway: "192.168.178.1"
+ssh_public_key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICFEE2WyDBEWiZibhxxj625397ul51nCiH2vzdKPBz5+ sre-challenge"
+ssh_key_path: "/home/kube/.ssh/sre-challenge-dev"

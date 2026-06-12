@@ -1,0 +1,19 @@
+# copy this file to setup.vars and fill in your values
+# setup.sh reads from setup.vars
+
+VAULT_PASSWORD=vault-supersecret
+
+DEV_DB_PASSWORD=dev-supersecret
+PROD_DB_PASSWORD=prod-supersecret
+
+PROXMOX_ENDPOINT=https://192.168.1.10:8006
+
+# this must be lower case
+PROXMOX_NODE=pve
+
+PROXMOX_API_TOKEN=root@pam!terraform=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+PROXMOX_SSH_KEY_PATH=~/.ssh/id_ed25519
+
+DEV_VM_IP=192.168.1.100/24
+PROD_VM_IP=192.168.1.101/24
+VM_GATEWAY=192.168.1.1

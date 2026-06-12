@@ -1,0 +1,29 @@
+---
+- name: Create app directory
+  ansible.builtin.file:
+    path: /opt/sre-challenge
+    state: directory
+    mode: '0755'
+
+- name: Copy app files
+  ansible.builtin.copy:
+    src: "{{ playbook_dir }}/../app/"
+    dest: /opt/sre-challenge/app/
+    mode: preserve
+
+- name: Copy docker-compose
+  ansible.builtin.copy:
+    src: "{{ playbook_dir }}/../docker-compose.yml"
+    dest: /opt/sre-challenge/docker-compose.yml
+    mode: '0644'
+
+- name: Generate .env file
+  ansible.builtin.template:
+    src: env.j2
+    dest: /opt/sre-challenge/.env
+    mode: '0600'
+
+- name: Deploy with docker compose
+  community.docker.docker_compose_v2:
+    project_src: /opt/sre-challenge
+    build: always

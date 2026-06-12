@@ -1,0 +1,33 @@
+---
+- name: Install required packages
+  ansible.builtin.package:
+    name:
+      - curl
+      - conntrack
+      - socat
+    state: present
+
+- name: Detect architecture
+  ansible.builtin.set_fact:
+    arch: "{{ 'arm64' if ansible_architecture == 'aarch64' else 'amd64' }}"
+
+- name: Download minikube binary
+  ansible.builtin.get_url:
+    url: "https://storage.googleapis.com/minikube/releases/v{{ minikube_version }}/minikube-linux-{{ arch }}"
+    dest: /usr/local/bin/minikube
+    mode: '0755'
+
+- name: Download kubectl
+  ansible.builtin.get_url:
+    url: "https://dl.k8s.io/release/v{{ kubectl_version }}/bin/linux/{{ arch }}/kubectl"
+    dest: /usr/local/bin/kubectl
+    mode: '0755'
+
+- name: Verify installation
+  ansible.builtin.command: minikube version
+  register: minikube_ver
+  changed_when: false
+
+- name: Show version
+  ansible.builtin.debug:
+    msg: "{{ minikube_ver.stdout }}"

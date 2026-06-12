@@ -1,0 +1,46 @@
+---
+- name: Local setup
+  hosts: localhost
+  connection: local
+  become: yes
+  tags: setup
+
+  roles:
+    - role: install_terraform
+
+- name: Provision VM
+  hosts: localhost
+  connection: local
+  become: yes
+  tags:
+    - dev_deploy
+    - prod_deploy
+
+  roles:
+    - role: provision_vm
+
+- name: Deploy on dev-VM
+  hosts: dev_vm
+  become: yes
+  tags: dev_deploy
+
+  roles:
+    - role: install_docker
+    - role: dev_deploy
+
+- name: Setup prod-VM
+  hosts: prod_vm
+  become: yes
+  tags: prod_deploy
+
+  roles:
+    - role: install_minikube
+
+# komt later
+#- name: Kubernetes
+#  hosts: prod_vm
+#  become: yes
+#  tags: prod_deploy
+#
+#  roles:
+#    - role: deploy_k8s

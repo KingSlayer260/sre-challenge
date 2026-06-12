@@ -1,0 +1,33 @@
+---
+- name: Install dependencies
+  ansible.builtin.apt:
+    pkg:
+      - gnupg
+      - software-properties-common
+      - curl
+    state: present
+    update_cache: true
+
+- name: Download HashiCorp GPG key
+  ansible.builtin.get_url:
+    url: https://apt.releases.hashicorp.com/gpg
+    dest: /etc/apt/keyrings/hashicorp.asc
+    mode: '0644'
+    force: true
+
+- name: Dearmor HashiCorp GPG key
+  ansible.builtin.command: gpg --dearmor --yes --output /etc/apt/keyrings/hashicorp.gpg /etc/apt/keyrings/hashicorp.asc
+  args:
+    creates: /etc/apt/keyrings/hashicorp.gpg
+
+- name: Add HashiCorp repository
+  ansible.builtin.apt_repository:
+    repo: "deb [signed-by=/etc/apt/keyrings/hashicorp.gpg] https://apt.releases.hashicorp.com {{ ansible_distribution_release }} main"
+    state: present
+    filename: hashicorp
+
+- name: Install Terraform
+  ansible.builtin.apt:
+    name: terraform
+    state: present
+    update_cache: true

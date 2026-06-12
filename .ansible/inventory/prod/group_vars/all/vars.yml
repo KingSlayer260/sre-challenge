@@ -1,0 +1,15 @@
+db_host: db
+db_name: sre
+db_user: sre
+minikube_version: "1.32.0"
+kubectl_version: "1.29.0"
+proxmox_endpoint: "https://192.168.178.222:8006"
+proxmox_node: "moxy"
+proxmox_ssh_key_path: "/home/kube/.ssh/proxmox"
+terraform_workspace: "prod"
+target_group: "prod_vm"
+vm_name: "sre-prod"
+vm_ip: "192.168.178.235/24"
+vm_gateway: "192.168.178.1"
+ssh_public_key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBe83UgUqUv8qWclNjVyTV3hWY/uAWswk0f5V1ASkeE/ sre-challenge"
+ssh_key_path: "/home/kube/.ssh/sre-challenge-prod"

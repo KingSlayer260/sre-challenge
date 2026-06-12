@@ -1,17 +1,24 @@
-import sqlite3
 import logging
+import os
+import psycopg2
+import psycopg2.extras
+from werkzeug.security import check_password_hash
 from flask import Flask, session, redirect, url_for, request, render_template, abort
 
 
 app = Flask(__name__)
-app.secret_key = b"192b9bdd22ab9ed4d12e236c78afcb9a393ec15f71bbf5dc987d54727823bcbf"
+app.secret_key = os.environ["SECRET_KEY"]
 app.logger.setLevel(logging.INFO)
 
 
 def get_db_connection():
-    connection = sqlite3.connect("database.db")
-    connection.row_factory = sqlite3.Row
-    return connection
+    return psycopg2.connect(
+        host=os.environ["DB_HOST"],
+        dbname=os.environ["DB_NAME"],
+        user=os.environ["DB_USER"],
+        password=os.environ["DB_PASSWORD"],
+        cursor_factory=psycopg2.extras.RealDictCursor,
+    )
 
 
 def is_authenticated():
@@ -22,16 +29,18 @@ def is_authenticated():
 
 def authenticate(username, password):
     connection = get_db_connection()
-    users = connection.execute("SELECT * FROM users").fetchall()
+    cursor = connection.cursor()
+    cursor.execute("SELECT * FROM users WHERE username = %s", (username,)) # fetch one instead of every user
+    user = cursor.fetchone()
+    cursor.close()
     connection.close()
 
-    for user in users:
-        if user["username"] == username and user["password"] == password:
-            app.logger.info(f"the user '{username}' logged in successfully with password '{password}'")
-            session["username"] = username
-            return True
+    if user and check_password_hash(user["password"], password):  # check hash instead of plaintext password
+        app.logger.info(f"the user '{username}' logged in successfully") # removed password from logs
+        session["username"] = username
+        return True
 
-    app.logger.warning(f"the user '{ username }' failed to log in '{ password }'")
+    app.logger.warning(f"the user '{username}' failed to log in") # removed password from logs
     abort(401)
 
 
@@ -54,7 +63,3 @@ def login():
 def logout():
     session.pop("username", None)
     return redirect(url_for("index"))
-
-
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000)

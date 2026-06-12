@@ -1,0 +1,36 @@
+---
+- name: Terraform init
+  ansible.builtin.command: terraform init
+  args:
+    chdir: "{{ playbook_dir }}/../terraform"
+
+- name: Terraform apply
+  community.general.terraform:
+    project_path: "{{ playbook_dir }}/../terraform"
+    workspace: "{{ terraform_workspace }}"
+    state: present
+    force_init: false
+    variables:
+      proxmox_endpoint: "{{ proxmox_endpoint }}"
+      proxmox_api_token: "{{ proxmox_api_token }}"
+      proxmox_node: "{{ proxmox_node }}"
+      proxmox_ssh_private_key: "{{ lookup('file', proxmox_ssh_key_path) }}"
+      vm_name: "{{ vm_name }}"
+      vm_ip: "{{ vm_ip }}"
+      vm_gateway: "{{ vm_gateway }}"
+      ssh_public_key: "{{ ssh_public_key }}"
+  register: terraform_output
+
+- name: Add VM to inventory
+  ansible.builtin.add_host:
+    name: "{{ terraform_output.outputs.vm_ip.value }}"
+    groups: "{{ target_group }}"
+    ansible_user: dev
+    ansible_ssh_private_key_file: "{{ ssh_key_path }}"
+
+- name: Wait for VM
+  ansible.builtin.wait_for:
+    host: "{{ terraform_output.outputs.vm_ip.value }}"
+    port: 22
+    delay: 10
+    timeout: 120

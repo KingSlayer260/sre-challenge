@@ -1,0 +1,12 @@
+-- maak table aan
+CREATE TABLE IF NOT EXISTS users (
+    id SERIAL PRIMARY KEY,
+    username TEXT NOT NULL,
+    password TEXT NOT NULL
+);
+
+-- maak test user aan
+INSERT INTO users (username, password) VALUES (
+    'admin',
+    'pbkdf2:sha256:260000$wDrhxP4QQNjRRYdh$387c3da23c4046c9bf33738f5123f0c27b6c5ba610fb651ba06dd993bac6814c'
+);
