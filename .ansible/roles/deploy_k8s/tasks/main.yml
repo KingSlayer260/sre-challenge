@@ -51,5 +51,4 @@
 
 - name: Apply manifests
   ansible.builtin.command: kubectl apply -f /opt/sre-challenge/k8s/
-  become_user: "{{ vm_user }}"
   changed_when: true
