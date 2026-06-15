@@ -1,10 +1,9 @@
 ---
 # https://www.digitalocean.com/community/tutorials/how-to-use-ansible-to-install-and-set-up-docker-on-ubuntu-20-04
-- name: Wait for apt lock
-  ansible.builtin.wait_for:
-    path: /var/lib/dpkg/lock-frontend
-    state: absent
-    timeout: 120
+- name: Wait for cloud-init
+  ansible.builtin.command: cloud-init status --wait
+  changed_when: false
+  timeout: 300
 
 - name: Install required system packages
   apt:
