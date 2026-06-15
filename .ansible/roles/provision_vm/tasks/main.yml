@@ -1,19 +1,14 @@
 ---
-- name: Ensure Terraform directories exist
+- name: Ensure Terraform state directory exists
   ansible.builtin.file:
-    path: "{{ item }}"
+    path: /var/lib/terraform/sre-challenge
     state: directory
     mode: '0755'
-  loop:
-    - /var/lib/terraform/sre-challenge
-    - /var/lib/terraform/sre-challenge/.terraform-data
 
 - name: Terraform init
   ansible.builtin.command: terraform init -reconfigure
   args:
     chdir: "{{ playbook_dir }}/../.terraform"
-  environment:
-    TF_DATA_DIR: /var/lib/terraform/sre-challenge/.terraform-data
 
 - name: Terraform apply
   community.general.terraform:
@@ -31,8 +26,6 @@
       vm_gateway: "{{ vm_gateway }}"
       ssh_public_key: "{{ ssh_public_key }}"
       vm_user: "{{ vm_user }}"
-  environment:
-    TF_DATA_DIR: /var/lib/terraform/sre-challenge/.terraform-data
   register: terraform_output
 
 - name: Add VM to inventory
