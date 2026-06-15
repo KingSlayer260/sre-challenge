@@ -31,3 +31,17 @@
 - name: Show version
   ansible.builtin.debug:
     msg: "{{ minikube_ver.stdout }}"
+
+- name: Check if minikube is running
+  ansible.builtin.command: minikube status
+  register: minikube_status
+  failed_when: false
+  changed_when: false
+
+- name: Start minikube cluster
+  ansible.builtin.command: minikube start --driver=docker --force
+  when: "'Running' not in minikube_status.stdout"
+
+- name: Enable metrics-server addon
+  ansible.builtin.command: minikube addons enable metrics-server
+  changed_when: false
