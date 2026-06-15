@@ -28,6 +28,7 @@
 
 - name: Load image into Minikube
   ansible.builtin.command: minikube image load /tmp/sre-challenge.tar
+  become_user: "{{ vm_user }}"
   changed_when: true
 
 - name: Create manifests directory
@@ -50,4 +51,5 @@
 
 - name: Apply manifests
   ansible.builtin.command: kubectl apply -f /opt/sre-challenge/k8s/
+  become_user: "{{ vm_user }}"
   changed_when: true

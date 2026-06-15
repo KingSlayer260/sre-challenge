@@ -37,13 +37,16 @@
   register: minikube_status
   failed_when: false
   changed_when: false
+  become_user: "{{ vm_user }}"
 
 - name: Start minikube cluster
-  ansible.builtin.command: minikube start --driver=docker --force --kubernetes-version=v{{ kubectl_version }}
+  ansible.builtin.command: minikube start --driver=docker --kubernetes-version=v{{ kubectl_version }}
   when: "'Running' not in minikube_status.stdout"
+  become_user: "{{ vm_user }}"
   async: 600
   poll: 30
 
 - name: Enable metrics-server addon
   ansible.builtin.command: minikube addons enable metrics-server
+  become_user: "{{ vm_user }}"
   changed_when: false

@@ -5,17 +5,12 @@
     state: directory
     mode: '0755'
 
-- name: Terraform init
-  ansible.builtin.command: terraform init -reconfigure
-  args:
-    chdir: "{{ playbook_dir }}/../.terraform"
-
 - name: Terraform apply
   community.general.terraform:
     project_path: "{{ playbook_dir }}/../.terraform"
     workspace: "{{ terraform_workspace }}"
     state: present
-    force_init: false
+    force_init: true
     variables:
       proxmox_endpoint: "{{ proxmox_endpoint }}"
       proxmox_api_token: "{{ proxmox_api_token }}"

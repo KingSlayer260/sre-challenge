@@ -52,3 +52,9 @@
       - docker-compose-plugin
     state: latest
     update_cache: true
+
+- name: Add VM user to docker group
+  ansible.builtin.user:
+    name: "{{ vm_user }}"
+    groups: docker
+    append: yes
