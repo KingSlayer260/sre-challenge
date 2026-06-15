@@ -58,3 +58,6 @@
     name: "{{ vm_user }}"
     groups: docker
     append: yes
+
+- name: Reset SSH connection to apply docker group
+  ansible.builtin.meta: reset_connection
