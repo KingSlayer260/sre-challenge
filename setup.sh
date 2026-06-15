@@ -56,7 +56,7 @@ db_host: db
 db_name: sre
 db_user: sre
 minikube_version: "1.32.0"
-kubectl_version: "1.29.0"
+kubectl_version: "1.28.3"
 proxmox_endpoint: "${PROXMOX_ENDPOINT}"
 proxmox_node: "${PROXMOX_NODE}"
 proxmox_ssh_key_path: "${PROXMOX_SSH_KEY_PATH}"
