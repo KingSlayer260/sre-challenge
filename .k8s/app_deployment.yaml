@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sre-deployment
+  labels:
+    app: sre-frontend
+spec:
+  selector:
+    matchLabels:
+      app: sre-frontend
+  template:
+    metadata:
+      labels:
+        app: sre-frontend
+    spec:
+      containers:
+      - name: sre-app
+        image: sre-challenge:latest
+        ports:
+        - containerPort: 5000
+

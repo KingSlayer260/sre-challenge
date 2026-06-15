@@ -1,0 +1,53 @@
+---
+- name: Create app directory
+  ansible.builtin.file:
+    path: /opt/sre-challenge/app
+    state: directory
+    mode: '0755'
+
+- name: Copy app files
+  ansible.builtin.copy:
+    src: "{{ playbook_dir }}/../app/"
+    dest: /opt/sre-challenge/app/
+    mode: preserve
+
+- name: Build Docker image
+  community.docker.docker_image:
+    name: sre-challenge
+    tag: latest
+    build:
+      path: /opt/sre-challenge/app
+    source: build
+    force_source: true
+
+- name: Save image to tar
+  community.docker.docker_image:
+    name: sre-challenge:latest
+    archive_path: /tmp/sre-challenge.tar
+    source: local
+
+- name: Load image into Minikube
+  ansible.builtin.command: minikube image load /tmp/sre-challenge.tar
+  changed_when: true
+
+- name: Create manifests directory
+  ansible.builtin.file:
+    path: /opt/sre-challenge/k8s
+    state: directory
+    mode: '0755'
+
+- name: Copy Kubernetes manifests
+  ansible.builtin.copy:
+    src: "{{ playbook_dir }}/../.k8s/"
+    dest: /opt/sre-challenge/k8s/
+    mode: preserve
+
+- name: Generate postgres secret
+  ansible.builtin.template:
+    src: postgres-secret.j2
+    dest: /opt/sre-challenge/k8s/postgres-secret.yml
+    mode: '0600'
+
+- name: Apply manifests
+  ansible.builtin.command: kubectl apply -f /opt/sre-challenge/k8s/
+  changed_when: true

@@ -1,6 +1,6 @@
 # Warpnet SRE Challenge
 
-This is my attampt at the Warpnet SRE-challenge.
+This is my attempt at the Warpnet SRE challenge. I run a Proxmox server at home, so I used that as the environment instead of a local virtual environment.
 
 ## Instructions
 
@@ -22,15 +22,13 @@ ansible-galaxy install gantsign.minikube
 
 ### Setup (run once)
 
+
+
 Run the setup script — it generates secrets and creates encrypted vault files for dev and prod:
 ```bash
 ./setup.sh
 ```
 
-You will be prompted for:
-- A vault password (default: `changeme`)
-- A dev database password (default: `dev-changeme`)
-- A prod database password (default: `prod-changeme`)
 
 ### Deploy
 
@@ -59,6 +57,7 @@ In this challenge, you'll navigate through a series of objectives designed to as
 
 - **Readability**
   - Ansible split into roles per responsibility
+  - Cleaned up `.gitignore` (removed irrelevant generated python template stuff)
 
 - **Extensibility**
   - SQLite replaced by PostgreSQL

@@ -8,6 +8,12 @@ fi
 
 source setup.vars
 
+# install ansible & requirements
+sudo apt update && sudo apt install -y python3 python3-pip
+pip install ansible docker
+ansible-galaxy collection install community.docker
+ansible-galaxy install gantsign.minikube
+
 # random keys for dev and prod
 DEV_SECRET_KEY=$(python3 -c "import secrets; print(secrets.token_hex(32))")
 PROD_SECRET_KEY=$(python3 -c "import secrets; print(secrets.token_hex(32))")
@@ -42,6 +48,7 @@ vm_ip: "${DEV_VM_IP}"
 vm_gateway: "${VM_GATEWAY}"
 ssh_public_key: "${DEV_VM_SSH_PUBLIC_KEY}"
 ssh_key_path: "${DEV_VM_SSH_KEY_PATH}"
+vm_user: "dev"
 EOF
 
 cat > .ansible/inventory/prod/group_vars/all/vars.yml <<EOF
@@ -60,6 +67,7 @@ vm_ip: "${PROD_VM_IP}"
 vm_gateway: "${VM_GATEWAY}"
 ssh_public_key: "${PROD_VM_SSH_PUBLIC_KEY}"
 ssh_key_path: "${PROD_VM_SSH_KEY_PATH}"
+vm_user: "prod"
 EOF
 
 # create vault files
@@ -80,6 +88,8 @@ echo "$VAULT_PASSWORD" | ansible-vault encrypt --vault-password-file /dev/stdin 
 
 echo "$VAULT_PASSWORD" | ansible-vault encrypt --vault-password-file /dev/stdin \
     .ansible/inventory/prod/group_vars/all/vault.yml
+
+ansible-playbook .ansible/master.yml --tags setup --ask-vault-pass
 
 echo ""
 echo "done"

@@ -34,13 +34,6 @@
   tags: prod_deploy
 
   roles:
+    - role: install_docker
     - role: install_minikube
-
-# komt later
-#- name: Kubernetes
-#  hosts: prod_vm
-#  become: yes
-#  tags: prod_deploy
-#
-#  roles:
-#    - role: deploy_k8s
+    - role: deploy_k8s

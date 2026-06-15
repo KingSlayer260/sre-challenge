@@ -1,0 +1,69 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: db
+spec:
+  ports:
+  - port: 5432
+  selector:
+    app: sre-backend
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: postgres-pv-claim
+  labels:
+    app: sre-backend
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sre-backend
+  labels:
+    app: sre-backend
+spec:
+  selector:
+    matchLabels:
+      app: sre-backend
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: sre-backend
+    spec:
+      containers:
+      - image: postgres:16-alpine
+        name: postgres-sre-backend
+        env:
+        - name: POSTGRES_USER
+          valueFrom:
+            secretKeyRef:
+              name: postgres-secret
+              key: username
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: postgres-secret
+              key: password
+        - name: POSTGRES_DB
+          valueFrom:
+            secretKeyRef:
+              name: postgres-secret
+              key: database
+        ports:
+        - containerPort: 5432
+          name: sre-backend
+        volumeMounts:
+        - name: postgres-pv-claim
+          mountPath: /var/lib/postgresql/data
+      volumes:
+      - name: postgres-pv-claim
+        persistentVolumeClaim:
+          claimName: postgres-pv-claim

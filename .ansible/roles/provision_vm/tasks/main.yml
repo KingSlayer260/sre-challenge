@@ -1,6 +1,12 @@
 ---
+- name: Ensure Terraform state directory exists
+  ansible.builtin.file:
+    path: /var/lib/terraform/sre-challenge
+    state: directory
+    mode: '0755'
+
 - name: Terraform init
-  ansible.builtin.command: terraform init
+  ansible.builtin.command: terraform init -reconfigure
   args:
     chdir: "{{ playbook_dir }}/../terraform"
 
@@ -19,13 +25,14 @@
       vm_ip: "{{ vm_ip }}"
       vm_gateway: "{{ vm_gateway }}"
       ssh_public_key: "{{ ssh_public_key }}"
+      vm_user: "{{ vm_user }}"
   register: terraform_output
 
 - name: Add VM to inventory
   ansible.builtin.add_host:
     name: "{{ terraform_output.outputs.vm_ip.value }}"
     groups: "{{ target_group }}"
-    ansible_user: dev
+    ansible_user: "{{ vm_user }}"
     ansible_ssh_private_key_file: "{{ ssh_key_path }}"
 
 - name: Wait for VM
