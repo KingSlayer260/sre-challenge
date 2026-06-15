@@ -6,10 +6,6 @@ terraform {
     }
   }
 
-  # state buiten de repo zodat ci/cd runs de state niet kwijtraken
-  backend "local" {
-    path = "/var/lib/terraform/sre-challenge/terraform.tfstate"
-  }
 }
 
 provider "proxmox" {
