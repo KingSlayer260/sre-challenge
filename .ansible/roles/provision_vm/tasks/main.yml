@@ -1,37 +1,55 @@
 ---
+- name: Ensure terraform state directory exists
+  ansible.builtin.file:
+    path: /var/lib/terraform/sre-challenge
+    state: directory
+    mode: '0755'
+
+- name: Render terraform tfvars
+  ansible.builtin.template:
+    src: terraform.tfvars.j2
+    dest: /tmp/terraform.tfvars
+    mode: '0600'
+
 - name: Terraform init
   ansible.builtin.command: terraform init -reconfigure
   args:
     chdir: "{{ playbook_dir }}/../.terraform"
 
+- name: Select or create terraform workspace
+  ansible.builtin.shell: |
+    terraform workspace select {{ terraform_workspace }} || terraform workspace new {{ terraform_workspace }}
+  args:
+    chdir: "{{ playbook_dir }}/../.terraform"
+  changed_when: true
+
 - name: Terraform apply
-  community.general.terraform:
-    project_path: "{{ playbook_dir }}/../.terraform"
-    workspace: "{{ terraform_workspace }}"
-    state: present
-    force_init: false
-    variables:
-      proxmox_endpoint: "{{ proxmox_endpoint }}"
-      proxmox_api_token: "{{ proxmox_api_token }}"
-      proxmox_node: "{{ proxmox_node }}"
-      proxmox_ssh_private_key: "{{ lookup('file', proxmox_ssh_key_path) }}"
-      vm_name: "{{ vm_name }}"
-      vm_ip: "{{ vm_ip }}"
-      vm_gateway: "{{ vm_gateway }}"
-      ssh_public_key: "{{ ssh_public_key }}"
-      vm_user: "{{ vm_user }}"
-  register: terraform_output
+  ansible.builtin.command: terraform apply -auto-approve -var-file=/tmp/terraform.tfvars
+  args:
+    chdir: "{{ playbook_dir }}/../.terraform"
+
+- name: Get VM IP from terraform output
+  ansible.builtin.command: terraform output -raw vm_ip
+  args:
+    chdir: "{{ playbook_dir }}/../.terraform"
+  register: tf_vm_ip
+  changed_when: false
+
+- name: Remove tfvars file
+  ansible.builtin.file:
+    path: /tmp/terraform.tfvars
+    state: absent
 
 - name: Add VM to inventory
   ansible.builtin.add_host:
-    name: "{{ terraform_output.outputs.vm_ip.value }}"
+    name: "{{ tf_vm_ip.stdout }}"
     groups: "{{ target_group }}"
     ansible_user: "{{ vm_user }}"
     ansible_ssh_private_key_file: "{{ ssh_key_path }}"
 
 - name: Wait for VM
   ansible.builtin.wait_for:
-    host: "{{ terraform_output.outputs.vm_ip.value }}"
+    host: "{{ tf_vm_ip.stdout }}"
     port: 22
     delay: 10
     timeout: 120
