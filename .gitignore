@@ -2,7 +2,7 @@
 setup.vars
 
 # terraform generated stuff
-terraform/.terraform/
+.terraform/.terraform/
 
 # python
 __pycache__/

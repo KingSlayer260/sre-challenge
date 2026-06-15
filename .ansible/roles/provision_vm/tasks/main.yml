@@ -8,11 +8,11 @@
 - name: Terraform init
   ansible.builtin.command: terraform init -reconfigure
   args:
-    chdir: "{{ playbook_dir }}/../terraform"
+    chdir: "{{ playbook_dir }}/../.terraform"
 
 - name: Terraform apply
   community.general.terraform:
-    project_path: "{{ playbook_dir }}/../terraform"
+    project_path: "{{ playbook_dir }}/../.terraform"
     workspace: "{{ terraform_workspace }}"
     state: present
     force_init: false
