@@ -62,6 +62,11 @@
   become_user: "{{ vm_user }}"
   changed_when: true
 
+- name: Restart app deployment to pick up new image
+  ansible.builtin.command: kubectl rollout restart deployment/sre-deployment
+  become_user: "{{ vm_user }}"
+  changed_when: true
+
 - name: Get minikube IP
   ansible.builtin.command: minikube ip
   become_user: "{{ vm_user }}"
