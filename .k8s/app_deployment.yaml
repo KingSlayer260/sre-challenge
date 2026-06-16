@@ -16,6 +16,7 @@ spec:
       containers:
       - name: sre-app
         image: sre-challenge:latest
+        imagePullPolicy: Never
         ports:
         - containerPort: 5000
 
