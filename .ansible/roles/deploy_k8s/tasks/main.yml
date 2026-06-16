@@ -80,9 +80,9 @@
     mode: '0644'
     content: |
       server {
-          listen 80;
+          listen 5000;
           location / {
-              proxy_pass http://{{ minikube_ip.stdout }};
+              proxy_pass http://{{ minikube_ip.stdout }}:80;
               proxy_set_header Host $host;
               proxy_set_header X-Real-IP $remote_addr;
           }
