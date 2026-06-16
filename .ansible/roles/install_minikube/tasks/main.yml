@@ -48,5 +48,6 @@
 
 - name: Enable metrics-server addon
   ansible.builtin.command: minikube addons enable metrics-server
-  become_user: "{{ vm_user }}"
+  environment:
+    HOME: /home/{{ vm_user }}
   changed_when: false

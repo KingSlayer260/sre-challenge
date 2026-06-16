@@ -13,6 +13,8 @@ sudo apt update && sudo apt install -y python3 python3-pip
 pip install ansible docker
 ansible-galaxy collection install community.docker
 ansible-galaxy install gantsign.minikube
+sudo apt-get install -y jq
+
 
 # random keys for dev and prod
 DEV_SECRET_KEY=$(python3 -c "import secrets; print(secrets.token_hex(32))")
