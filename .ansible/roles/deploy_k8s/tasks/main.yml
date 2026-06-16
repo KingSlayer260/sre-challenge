@@ -48,6 +48,7 @@
     src: postgres-secret.j2
     dest: /opt/sre-challenge/k8s/postgres-secret.yml
     mode: '0600'
+    owner: "{{ vm_user }}"
 
 - name: Apply manifests
   ansible.builtin.command: kubectl apply -f /opt/sre-challenge/k8s/
