@@ -13,6 +13,8 @@ sudo apt update && sudo apt install -y python3 python3-pip
 pip install ansible docker
 ansible-galaxy collection install community.docker
 ansible-galaxy install gantsign.minikube
+# om terrastate te downloaden en uploaden van git
+sudo apt-get install -y unzip
 sudo apt-get install -y jq
 
 
