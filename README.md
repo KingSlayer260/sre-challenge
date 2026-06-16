@@ -62,6 +62,7 @@ I
   - Successful and failed logins logged
 
 - **Security**
+  - CodeQL static analysis on every push
   - Database credentials & secretkey encrypted with Ansible Vault
   - Gunicorn instead of Flask dev-server
   - Removed password from failed and succesfull login
