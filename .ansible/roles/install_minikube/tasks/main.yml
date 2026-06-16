@@ -40,7 +40,7 @@
   become_user: "{{ vm_user }}"
 
 - name: Start minikube cluster
-  ansible.builtin.command: minikube start --driver=docker --kubernetes-version=v{{ kubectl_version }} --addons=metrics-server
+  ansible.builtin.command: minikube start --driver=docker --kubernetes-version=v{{ kubectl_version }} --addons=ingress,metrics-server
   when: "'Running' not in minikube_status.stdout"
   become_user: "{{ vm_user }}"
   async: 600

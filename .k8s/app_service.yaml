@@ -3,10 +3,9 @@ kind: Service
 metadata:
   name: sre-service
 spec:
-  type: NodePort
+  type: ClusterIP
   selector:
     app: sre-frontend
   ports:
     - port: 5000
       targetPort: 5000
-      nodePort: 30000

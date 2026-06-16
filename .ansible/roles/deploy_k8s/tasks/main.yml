@@ -62,12 +62,44 @@
   become_user: "{{ vm_user }}"
   changed_when: true
 
-- name: Kill existing port-forward
-  ansible.builtin.shell: pkill -f "kubectl port-forward svc/sre-service" || true
+- name: Get minikube IP
+  ansible.builtin.command: minikube ip
+  become_user: "{{ vm_user }}"
+  register: minikube_ip
   changed_when: false
 
-- name: Start port-forward
-  ansible.builtin.shell: |
-    nohup kubectl port-forward svc/sre-service 5000:5000 --address 0.0.0.0 > /tmp/port-forward.log 2>&1 &
-  become_user: "{{ vm_user }}"
-  changed_when: true
+- name: Install nginx
+  ansible.builtin.apt:
+    name: nginx
+    state: present
+    update_cache: true
+
+- name: Configure nginx reverse proxy
+  ansible.builtin.copy:
+    dest: /etc/nginx/sites-available/sre-challenge
+    mode: '0644'
+    content: |
+      server {
+          listen 80;
+          location / {
+              proxy_pass http://{{ minikube_ip.stdout }};
+              proxy_set_header Host $host;
+              proxy_set_header X-Real-IP $remote_addr;
+          }
+      }
+
+- name: Enable nginx site
+  ansible.builtin.file:
+    src: /etc/nginx/sites-available/sre-challenge
+    dest: /etc/nginx/sites-enabled/sre-challenge
+    state: link
+
+- name: Remove default nginx site
+  ansible.builtin.file:
+    path: /etc/nginx/sites-enabled/default
+    state: absent
+
+- name: Reload nginx
+  ansible.builtin.systemd:
+    name: nginx
+    state: reloaded
