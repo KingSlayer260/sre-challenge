@@ -23,6 +23,25 @@ jobs:
           echo "${{ secrets.VAULT_PASSWORD }}" > /tmp/vault_pass
           chmod 600 /tmp/vault_pass
 
+      - name: Set environment name
+        id: env
+        run: |
+          if [ "${{ github.ref }}" = "refs/heads/main" ]; then
+            echo "name=prod" >> $GITHUB_OUTPUT
+          else
+            echo "name=dev" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Download terraform state
+        uses: badgerhobbs/terraform-state@v2
+        with:
+          operation: download
+          location: artifact
+          encryption_key: ${{ secrets.TF_STATE_PASSPHRASE }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          directory: /var/lib/terraform/sre-challenge/${{ steps.env.outputs.name }}
+        continue-on-error: true
+
       - name: Deploy to dev
         if: github.ref == 'refs/heads/dev'
         run: ansible-playbook .ansible/master.yml -i .ansible/inventory/dev --tags dev_deploy --vault-password-file /tmp/vault_pass
@@ -30,6 +49,16 @@ jobs:
       - name: Deploy to prod
         if: github.ref == 'refs/heads/main'
         run: ansible-playbook .ansible/master.yml -i .ansible/inventory/prod --tags prod_deploy --vault-password-file /tmp/vault_pass
+
+      - name: Upload terraform state
+        if: always()
+        uses: badgerhobbs/terraform-state@v2
+        with:
+          operation: upload
+          location: artifact
+          encryption_key: ${{ secrets.TF_STATE_PASSPHRASE }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          directory: /var/lib/terraform/sre-challenge/${{ steps.env.outputs.name }}
 
       - name: Cleanup
         if: always()
