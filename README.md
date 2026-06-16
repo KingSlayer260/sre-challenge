@@ -75,6 +75,7 @@ In this challenge, you'll navigate through a series of objectives designed to as
   - Database credentials & secretkey encrypted with Ansible Vault
   - Gunicorn instead of Flask dev-server
   - Removed password from failed and succesfull login
+  - metrics-server runs with `--kubelet-insecure-tls` — Minikube's kubelet uses a self-signed cert, proper CA setup would require mounting Minikube's CA into the pod. Non-issue on a real cluster.
   The original code logged the user's passsword in the logs when a failed or succesfull login occurred
 
   - Now only fetches the user logging in instead of all users.
