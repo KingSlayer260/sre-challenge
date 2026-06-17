@@ -17,7 +17,7 @@ resource "proxmox_virtual_environment_vm" "vm" {
   }
 
   memory {
-    dedicated = 4096
+    dedicated = 8192
   }
 
   network_device {

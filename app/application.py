@@ -4,10 +4,12 @@ import psycopg2
 import psycopg2.extras
 from werkzeug.security import check_password_hash
 from flask import Flask, session, redirect, url_for, request, render_template, abort
+from prometheus_flask_exporter import PrometheusMetrics
 
 
 app = Flask(__name__)
 app.secret_key = os.environ["SECRET_KEY"]
+metrics = PrometheusMetrics(app)
 app.logger.setLevel(logging.INFO)
 
 

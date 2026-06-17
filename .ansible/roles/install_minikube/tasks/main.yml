@@ -43,9 +43,24 @@
   become_user: "{{ vm_user }}"
   changed_when: true
 
+- name: Stop minikube if unhealthy
+  ansible.builtin.command: minikube stop
+  when: >
+    'apiserver: Running' not in minikube_status.stdout
+    or minikube_status.rc != 0
+    or 'rror' in minikube_status.stdout
+    or 'rror' in minikube_status.stderr
+  become_user: "{{ vm_user }}"
+  failed_when: false
+  changed_when: true
+
 - name: Start minikube cluster
   ansible.builtin.command: minikube start --driver=docker --kubernetes-version=v{{ kubectl_version }}
-  when: "'apiserver: Running' not in minikube_status.stdout"
+  when: >
+    'apiserver: Running' not in minikube_status.stdout
+    or minikube_status.rc != 0
+    or 'rror' in minikube_status.stdout
+    or 'rror' in minikube_status.stderr
   become_user: "{{ vm_user }}"
   async: 600
   poll: 30
