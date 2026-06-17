@@ -12,11 +12,14 @@
   ansible.builtin.command: helm repo update
   become_user: "{{ vm_user }}"
 
+- name: Create monitoring --namespace
+  ansible.builtin.command: kubectl create namespace monitoring 
+  become_user: "{{ vm_user }}"
+
 - name: Install kube-prometheus-stack
   ansible.builtin.command: >
     helm upgrade --install monitoring prometheus-community/kube-prometheus-stack
     --namespace monitoring
-    --create-namespace
   become_user: "{{ vm_user }}"
   environment:
     KUBECONFIG: /home/{{ vm_user }}/.kube/config
