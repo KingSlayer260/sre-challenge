@@ -25,6 +25,10 @@
     -var-file=/tmp/terraform.tfvars
   args:
     chdir: "{{ playbook_dir }}/../.terraform"
+  register: tf_apply
+  retries: 3
+  delay: 15
+  until: tf_apply.rc == 0
 
 - name: Get VM IP from terraform output
   ansible.builtin.command: >
