@@ -1,0 +1,22 @@
+---
+- name: Install Helm
+  ansible.builtin.shell: curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+  args:
+    creates: /usr/local/bin/helm
+
+- name: Add prometheus-community repo
+  ansible.builtin.command: helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+  become_user: "{{ vm_user }}"
+
+- name: Update helm repos
+  ansible.builtin.command: helm repo update
+  become_user: "{{ vm_user }}"
+
+- name: Install kube-prometheus-stack
+  ansible.builtin.command: >
+    helm upgrade --install monitoring prometheus-community/kube-prometheus-stack
+    --namespace monitoring
+    --create-namespace
+  become_user: "{{ vm_user }}"
+  environment:
+    KUBECONFIG: /home/{{ vm_user }}/.kube/config
