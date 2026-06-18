@@ -3,7 +3,7 @@ db_name: sre
 db_user: sre
 minikube_version: "1.32.0"
 kubectl_version: "1.28.3"
-minikube_memory: "12 288"
+minikube_memory: "12288"
 minikube_cpus: "8"
 proxmox_endpoint: "https://192.168.178.222:8006"
 proxmox_node: "moxy"
