@@ -29,3 +29,7 @@
   become_user: "{{ vm_user }}"
   environment:
     KUBECONFIG: /home/{{ vm_user }}/.kube/config
+  register: helm_install
+  retries: 3
+  delay: 20
+  until: helm_install.rc == 0
