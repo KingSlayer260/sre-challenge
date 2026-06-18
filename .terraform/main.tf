@@ -12,7 +12,7 @@ resource "proxmox_virtual_environment_vm" "vm" {
   node_name = var.proxmox_node
 
   cpu {
-    cores = 2
+    cores = 4
     type  = "kvm64"
   }
 
