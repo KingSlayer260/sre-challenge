@@ -31,15 +31,43 @@
   ansible.builtin.debug:
     msg: "{{ minikube_ver.stdout }}"
 
+- name: Check if minikube is running
+  ansible.builtin.command: minikube status
+  register: minikube_status
+  failed_when: false
+  become_user: "{{ vm_user }}"
+
+- name: Get actual resources of the running minikube container
+  ansible.builtin.shell: >
+    docker inspect minikube | python3 -c
+    "import json,sys; d=json.load(sys.stdin)[0]['HostConfig']; print(d['Memory'], d['NanoCpus'])"
+  register: minikube_actual_resources
+  failed_when: false
+  changed_when: false
+  become_user: "{{ vm_user }}"
+
+- name: Determine if minikube needs to be (re)created
+  ansible.builtin.set_fact:
+    minikube_needs_recreate: >-
+      {{
+        minikube_status.rc != 0
+        or 'apiserver: Running' not in minikube_status.stdout
+        or minikube_actual_resources.rc != 0
+        or (minikube_actual_resources.stdout.split()[0] | int) != (minikube_memory | int * 1024 * 1024)
+        or (minikube_actual_resources.stdout.split()[1] | int) != (minikube_cpus | int * 1000000000)
+      }}
+
 - name: Delete existing minikube cluster
   ansible.builtin.command: minikube delete
   become_user: "{{ vm_user }}"
+  when: minikube_needs_recreate
   failed_when: false
   changed_when: true
 
 - name: Start minikube cluster
   ansible.builtin.command: minikube start --driver=docker --kubernetes-version=v{{ kubectl_version }} --memory={{ minikube_memory }} --cpus={{ minikube_cpus }}
   become_user: "{{ vm_user }}"
+  when: minikube_needs_recreate
   async: 600
   poll: 30
 
@@ -50,3 +78,4 @@
     - metrics-server
     - ingress
   become: false
+  when: minikube_needs_recreate
