@@ -12,9 +12,14 @@
   ansible.builtin.command: helm repo update
   become_user: "{{ vm_user }}"
 
-- name: Create monitoring --namespace
-  ansible.builtin.command: kubectl create namespace monitoring 
+- name: Create monitoring namespace
+  ansible.builtin.command: kubectl create namespace monitoring
   become_user: "{{ vm_user }}"
+  register: create_ns
+  retries: 3
+  delay: 10
+  until: create_ns.rc == 0 or 'AlreadyExists' in create_ns.stderr
+  failed_when: create_ns.rc != 0 and 'AlreadyExists' not in create_ns.stderr
 
 - name: Install kube-prometheus-stack
   ansible.builtin.command: >

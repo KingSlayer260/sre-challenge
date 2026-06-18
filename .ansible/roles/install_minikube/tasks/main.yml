@@ -55,7 +55,7 @@
   changed_when: true
 
 - name: Start minikube cluster
-  ansible.builtin.command: minikube start --driver=docker --kubernetes-version=v{{ kubectl_version }}
+  ansible.builtin.command: minikube start --driver=docker --kubernetes-version=v{{ kubectl_version }} --memory={{ minikube_memory }}
   when: >
     'apiserver: Running' not in minikube_status.stdout
     or minikube_status.rc != 0

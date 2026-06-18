@@ -13,12 +13,12 @@ sudo apt update && sudo apt install -y python3 python3-pip
 pip install ansible docker
 ansible-galaxy collection install community.docker
 ansible-galaxy install gantsign.minikube
-# om terrastate te downloaden en uploaden van git
+# to download terrastate from git
 sudo apt-get install -y unzip
 sudo apt-get install -y jq
 
 
-# random keys for dev and prod
+# random keys for dev and prod app
 DEV_SECRET_KEY=$(python3 -c "import secrets; print(secrets.token_hex(32))")
 PROD_SECRET_KEY=$(python3 -c "import secrets; print(secrets.token_hex(32))")
 
@@ -61,6 +61,7 @@ db_name: sre
 db_user: sre
 minikube_version: "1.32.0"
 kubectl_version: "1.28.3"
+minikube_memory: "${MINIKUBE_MEMORY}"
 proxmox_endpoint: "${PROXMOX_ENDPOINT}"
 proxmox_node: "${PROXMOX_NODE}"
 proxmox_ssh_key_path: "${PROXMOX_SSH_KEY_PATH}"
