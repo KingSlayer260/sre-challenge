@@ -36,6 +36,9 @@
   register: minikube_status
   failed_when: false
   become_user: "{{ vm_user }}"
+  retries: 3
+  delay: 5
+  until: "minikube_status.rc == 0 and 'apiserver: Running' in minikube_status.stdout"
 
 - name: Update minikube context if misconfigured
   ansible.builtin.command: minikube update-context
