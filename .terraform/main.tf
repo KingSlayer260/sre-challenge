@@ -12,12 +12,12 @@ resource "proxmox_virtual_environment_vm" "vm" {
   node_name = var.proxmox_node
 
   cpu {
-    cores = 4
+    cores = var.vm_cpus
     type  = "kvm64"
   }
 
   memory {
-    dedicated = 8192
+    dedicated = var.vm_memory
   }
 
   network_device {

@@ -35,3 +35,11 @@ variable "ssh_public_key" {
 variable "vm_user" {
   type = string
 }
+
+variable "vm_memory" {
+  type = number
+}
+
+variable "vm_cpus" {
+  type = number
+}
