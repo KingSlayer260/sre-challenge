@@ -4,18 +4,18 @@
   ansible.builtin.command: cloud-init status --wait
   timeout: 300
 
-# - name: Install required system packages
-#   apt:
-#     pkg:
-#       - ca-certificates
-#       - curl
-#       - gnupg
-#       - software-properties-common
-#       - python3-pip
-#       - python3-venv
-#       - python3-setuptools
-#     state: latest
-#     update_cache: true
+- name: Install required system packages
+  apt:
+    pkg:
+      - ca-certificates
+      - curl
+      - gnupg
+      - software-properties-common
+      - python3-pip
+      - python3-venv
+      - python3-setuptools
+    state: latest
+    update_cache: true
 
 - name: Create keyrings directory
   file:
