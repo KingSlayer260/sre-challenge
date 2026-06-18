@@ -18,8 +18,16 @@ DEV_VM_IP=192.168.1.100/24
 PROD_VM_IP=192.168.1.101/24
 VM_GATEWAY=192.168.1.1
 
+# dev VM hardware specs 
+DEV_VM_MEMORY=4096
+DEV_VM_CPUS=2
+
+# prod VM hardware specs 
+PROD_VM_MEMORY=16384
+PROD_VM_CPUS=8
+
 # memory in MB given to the minikube cluster
-MINIKUBE_MEMORY=6144
+MINIKUBE_MEMORY=16184
 
 # cpu cores given to the minikube cluster
-MINIKUBE_CPUS=3
+MINIKUBE_CPUS=8

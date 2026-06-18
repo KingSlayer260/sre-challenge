@@ -6,6 +6,8 @@ vm_ip                   = "{{ vm_ip }}"
 vm_gateway              = "{{ vm_gateway }}"
 ssh_public_key          = "{{ ssh_public_key }}"
 vm_user                 = "{{ vm_user }}"
+vm_memory               = {{ vm_memory }}
+vm_cpus                 = {{ vm_cpus }}
 proxmox_ssh_private_key = <<EOT
 {{ lookup('file', proxmox_ssh_key_path) }}
 EOT

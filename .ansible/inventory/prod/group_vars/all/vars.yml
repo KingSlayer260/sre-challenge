@@ -10,6 +10,8 @@ proxmox_node: "moxy"
 proxmox_ssh_key_path: "/home/kube/.ssh/proxmox"
 terraform_workspace: "prod"
 target_group: "prod_vm"
+vm_memory: 16384
+vm_cpus: 8
 vm_name: "sre-prod"
 vm_ip: "192.168.178.235/24"
 vm_gateway: "192.168.1.1"

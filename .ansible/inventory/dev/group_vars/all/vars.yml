@@ -6,6 +6,8 @@ proxmox_node: "moxy"
 proxmox_ssh_key_path: "/home/kube/.ssh/proxmox"
 terraform_workspace: "dev"
 target_group: "dev_vm"
+vm_memory: 4096
+vm_cpus: 2
 vm_name: "sre-dev"
 vm_ip: "192.168.178.234/24"
 vm_gateway: "192.168.1.1"

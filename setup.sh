@@ -47,6 +47,8 @@ proxmox_node: "${PROXMOX_NODE}"
 proxmox_ssh_key_path: "${PROXMOX_SSH_KEY_PATH}"
 terraform_workspace: "dev"
 target_group: "dev_vm"
+vm_memory: ${DEV_VM_MEMORY}
+vm_cpus: ${DEV_VM_CPUS}
 vm_name: "sre-dev"
 vm_ip: "${DEV_VM_IP}"
 vm_gateway: "${VM_GATEWAY}"
@@ -68,6 +70,8 @@ proxmox_node: "${PROXMOX_NODE}"
 proxmox_ssh_key_path: "${PROXMOX_SSH_KEY_PATH}"
 terraform_workspace: "prod"
 target_group: "prod_vm"
+vm_memory: ${PROD_VM_MEMORY}
+vm_cpus: ${PROD_VM_CPUS}
 vm_name: "sre-prod"
 vm_ip: "${PROD_VM_IP}"
 vm_gateway: "${VM_GATEWAY}"
