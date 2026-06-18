@@ -20,3 +20,6 @@ VM_GATEWAY=192.168.1.1
 
 # memory in MB given to the minikube cluster
 MINIKUBE_MEMORY=6144
+
+# cpu cores given to the minikube cluster
+MINIKUBE_CPUS=3

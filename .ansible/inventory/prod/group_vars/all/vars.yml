@@ -4,6 +4,7 @@ db_user: sre
 minikube_version: "1.32.0"
 kubectl_version: "1.28.3"
 minikube_memory: "6144"
+minikube_cpus: "3"
 proxmox_endpoint: "https://192.168.178.222:8006"
 proxmox_node: "moxy"
 proxmox_ssh_key_path: "/home/kube/.ssh/proxmox"

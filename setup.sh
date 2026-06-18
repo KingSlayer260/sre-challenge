@@ -62,6 +62,7 @@ db_user: sre
 minikube_version: "1.32.0"
 kubectl_version: "1.28.3"
 minikube_memory: "${MINIKUBE_MEMORY}"
+minikube_cpus: "${MINIKUBE_CPUS}"
 proxmox_endpoint: "${PROXMOX_ENDPOINT}"
 proxmox_node: "${PROXMOX_NODE}"
 proxmox_ssh_key_path: "${PROXMOX_SSH_KEY_PATH}"
