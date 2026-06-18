@@ -3,7 +3,7 @@ db_name: sre
 db_user: sre
 minikube_version: "1.32.0"
 kubectl_version: "1.28.3"
-minikube_memory: "16184"
+minikube_memory: "12 288"
 minikube_cpus: "8"
 proxmox_endpoint: "https://192.168.178.222:8006"
 proxmox_node: "moxy"
@@ -14,7 +14,7 @@ vm_memory: 16384
 vm_cpus: 8
 vm_name: "sre-prod"
 vm_ip: "192.168.178.235/24"
-vm_gateway: "192.168.1.1"
+vm_gateway: "192.168.178.1"
 ssh_public_key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBe83UgUqUv8qWclNjVyTV3hWY/uAWswk0f5V1ASkeE/ sre-challenge"
 ssh_key_path: "/home/kube/.ssh/sre-challenge-prod"
 vm_user: "prod"
