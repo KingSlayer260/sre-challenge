@@ -62,3 +62,10 @@
 
 - name: Reset SSH connection to apply docker group
   ansible.builtin.meta: reset_connection
+
+- name: Verify docker group permissions
+  ansible.builtin.command: docker ps
+  become: false
+  register: docker_perm_check
+  changed_when: false
+  failed_when: docker_perm_check.rc != 0
