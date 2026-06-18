@@ -2,15 +2,17 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: sre-ingress
-  annotations:
-    nginx.ingress.kubernetes.io/server-snippet: |
-      location /metrics {
-        return 403;
-      }
 spec:
   rules:
   - http:
       paths:
+      - path: /metrics
+        pathType: Exact
+        backend:
+          service:
+            name: metrics-blackhole
+            port:
+              number: 80
       - path: /
         pathType: Prefix
         backend:
