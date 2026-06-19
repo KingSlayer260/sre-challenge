@@ -6,6 +6,8 @@ on:
     # anders triggert de auto-commit van de terraform state zelf weer een nieuwe deploy
     paths-ignore:
       - ".terraform-state/**"
+  # handmatig retriggeren via de Actions-tab
+  workflow_dispatch:
 
 # don't run multiple deploys at the same time
 concurrency:
