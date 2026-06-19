@@ -27,6 +27,8 @@
     helm upgrade --install monitoring prometheus-community/kube-prometheus-stack
     --namespace monitoring
     --set "grafana.grafana\.ini.server.root_url=http://{{ vm_ip.split('/')[0] }}:3000/"
+    --set "grafana.grafana\.ini.security.csrf_trusted_origins=http://{{ vm_ip.split('/')[0] }}:3000"
+    --set "grafana.grafana\.ini.security.csrf_additional_headers=X-Forwarded-Host"
   become_user: "{{ vm_user }}"
   environment:
     KUBECONFIG: /home/{{ vm_user }}/.kube/config
