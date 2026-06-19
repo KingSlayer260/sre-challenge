@@ -3,6 +3,9 @@ name: Deploy
 on:
   push:
     branches: [dev, main]
+    # anders triggert de auto-commit van de terraform state zelf weer een nieuwe deploy
+    paths-ignore:
+      - ".terraform-state/**"
 
 # don't run multiple deploys at the same time
 concurrency:
@@ -37,10 +40,10 @@ jobs:
         uses: badgerhobbs/terraform-state@v2
         with:
           operation: download
-          location: artifact
+          location: repository
           encryption_key: ${{ secrets.TF_STATE_PASSPHRASE }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          directory: /var/lib/terraform/sre-challenge/${{ steps.env.outputs.name }}
+          directory: .terraform-state/${{ steps.env.outputs.name }}
         continue-on-error: true
 
       - name: Deploy to dev
@@ -56,10 +59,10 @@ jobs:
         uses: badgerhobbs/terraform-state@v2
         with:
           operation: upload
-          location: artifact
+          location: repository
           encryption_key: ${{ secrets.TF_STATE_PASSPHRASE }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          directory: /var/lib/terraform/sre-challenge/${{ steps.env.outputs.name }}
+          directory: .terraform-state/${{ steps.env.outputs.name }}
 
       - name: Cleanup
         if: always()

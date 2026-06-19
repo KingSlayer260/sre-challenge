@@ -1,11 +1,9 @@
 ---
 - name: Ensure terraform state directory exists
   ansible.builtin.file:
-    path: /var/lib/terraform/sre-challenge/{{ terraform_workspace }}
+    path: "{{ playbook_dir }}/../.terraform-state/{{ terraform_workspace }}"
     state: directory
     mode: '0755'
-    owner: "{{ ansible_user_id }}"
-  become: yes
 
 - name: Render terraform tfvars
   ansible.builtin.template:
@@ -21,7 +19,7 @@
 - name: Terraform apply
   ansible.builtin.command: >
     terraform apply -auto-approve
-    -state=/var/lib/terraform/sre-challenge/{{ terraform_workspace }}/terraform.tfstate
+    -state={{ playbook_dir }}/../.terraform-state/{{ terraform_workspace }}/terraform.tfstate
     -var-file=/tmp/terraform.tfvars
   args:
     chdir: "{{ playbook_dir }}/../.terraform"
@@ -33,7 +31,7 @@
 - name: Get VM IP from terraform output
   ansible.builtin.command: >
     terraform output
-    -state=/var/lib/terraform/sre-challenge/{{ terraform_workspace }}/terraform.tfstate
+    -state={{ playbook_dir }}/../.terraform-state/{{ terraform_workspace }}/terraform.tfstate
     -raw vm_ip
   args:
     chdir: "{{ playbook_dir }}/../.terraform"
