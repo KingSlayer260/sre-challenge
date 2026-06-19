@@ -23,6 +23,13 @@
     dest: /opt/sre-challenge/.env
     mode: '0600'
 
+# anders blijft soms een oude container port 5000 vasthouden bij de volgende deploy
+- name: Stop existing docker compose stack
+  community.docker.docker_compose_v2:
+    project_src: /opt/sre-challenge
+    state: absent
+  failed_when: false
+
 - name: Deploy with docker compose
   community.docker.docker_compose_v2:
     project_src: /opt/sre-challenge
