@@ -18,4 +18,5 @@ COPY . /app/
 
 EXPOSE 5000
 
-CMD ["/usr/local/bin/gunicorn", "-w", "4", "-b", "0.0.0.0:5000", "application:app"].ansible/inventory
+ENTRYPOINT ["/usr/local/bin/gunicorn"]
+CMD ["-w", "4", "-b", "0.0.0.0:5000", "application:app"]
