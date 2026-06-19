@@ -36,5 +36,4 @@
   roles:
     - role: install_docker
     - role: install_minikube
-    - role: install_monitoring
     - role: deploy_k8s
