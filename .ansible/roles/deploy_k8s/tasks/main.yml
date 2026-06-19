@@ -97,6 +97,7 @@
           location / {
               proxy_pass http://{{ minikube_ip.stdout }}:80;
               proxy_set_header Host grafana.local;
+              proxy_set_header X-Forwarded-Host $host:$server_port;
           }
       }
 
