@@ -7,7 +7,7 @@ WORKDIR /app
 COPY requirements.txt .
 RUN pip install --no-cache-dir --prefix=/install -r requirements.txt
 
-# de rest van de applicatiebestanden kopiëren
+# distroless image pakken en daar de app op runnen
 FROM gcr.io/distroless/python3-debian12
 
 WORKDIR /app
@@ -18,5 +18,5 @@ COPY . /app/
 
 EXPOSE 5000
 
-ENTRYPOINT ["/usr/local/bin/gunicorn"]
+ENTRYPOINT ["/usr/bin/python3.11", "-m", "gunicorn"]
 CMD ["-w", "4", "-b", "0.0.0.0:5000", "application:app"]
