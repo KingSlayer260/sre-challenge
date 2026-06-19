@@ -57,6 +57,7 @@ In this part I will explain how I have improved on the stated objectives from th
   - (app) Pinned versions in `requirements.txt`
   - (orchestration) Variables centralized in Ansible vars
   - (kubernetes) Secrets injected via Kubernetes Secrets, not hardcoded
+  - (proxmox) vm memory and cpu can be changed and will be applied on push
 
 - **Observability**
   - (app) Successful and failed logins logged
@@ -78,6 +79,8 @@ In this part I will explain how I have improved on the stated objectives from th
 
   - (app) Original code had the secret_key hardcoded into the code.
   Everybody who has access to the repo can generate their own cookies. Now it is loaded from env.
+
+  - (app) Distroless image so: no shell and no package manager means a smaller attack surface. 
 
 
 
