@@ -16,6 +16,8 @@ COPY --from=build /install /usr/local
 
 COPY . /app/
 
+ENV PYTHONPATH=/usr/local/lib/python3.11/site-packages
+
 EXPOSE 5000
 
 ENTRYPOINT ["/usr/bin/python3.11", "-m", "gunicorn"]
