@@ -8,7 +8,6 @@ from flask import Flask, session, redirect, url_for, request, render_template, a
 
 app = Flask(__name__)
 app.secret_key = os.environ["SECRET_KEY"]
-metrics = PrometheusMetrics(app)
 app.logger.setLevel(logging.INFO)
 
 
